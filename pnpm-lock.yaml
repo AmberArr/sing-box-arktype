@@ -1,0 +1,41 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  arktype:
+    specifier: 2.0.0-dev.26
+    version: 2.0.0-dev.26
+
+devDependencies:
+  '@arktype/schema':
+    specifier: ^0.1.18
+    version: 0.1.18
+  typescript:
+    specifier: ^5.2.2
+    version: 5.5.3
+
+packages:
+
+  /@arktype/schema@0.1.18:
+    resolution: {integrity: sha512-6xMboHvnO3NtgYNP160PmghElUDpKe/aDMqH2hRRHoMb1Nh0bPilDfr9LJnXQEwfA5hDguqRM+vifOKkROtOLA==}
+    dependencies:
+      '@arktype/util': 0.0.51
+
+  /@arktype/util@0.0.51:
+    resolution: {integrity: sha512-lukmZcbSVI27ZJ4uJA7ztCKM5OligUfdTrr0E6k+F0tzz9iSEcplS0KZbVD2WfrLL3HXNKBE6g/w3nhYMAMoqw==}
+
+  /arktype@2.0.0-dev.26:
+    resolution: {integrity: sha512-L7JkKHPkvEoDRKhtXyrCQcHast2oXFo7sOX1SZ3GSbIFJcEnTRRW12lFvH8M4fFR589CaOE9LleHMg9jZFR2TA==}
+    dependencies:
+      '@arktype/schema': 0.1.18
+      '@arktype/util': 0.0.51
+    dev: false
+
+  /typescript@5.5.3:
+    resolution: {integrity: sha512-/hreyEujaB0w76zKo6717l3L0o/qEUtRgdvUBvlkhoWeOVMjMuHNHk0BRBzikzuGDqNmPQbg5ifMEqsHLiIUcQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true

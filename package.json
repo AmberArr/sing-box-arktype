@@ -1,0 +1,16 @@
+{
+  "name": "sing-box-arktype",
+  "version": "1.9.3",
+  "type": "module",
+  "exports": {
+    ".": "./type.ts"
+  },
+  "types": "./type.ts",
+  "dependencies": {
+    "arktype": "2.0.0-dev.26"
+  },
+  "devDependencies": {
+    "@arktype/schema": "^0.1.18",
+    "typescript": "^5.2.2"
+  }
+}
