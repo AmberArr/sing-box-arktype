@@ -1,55 +1,36 @@
-// @ts-nocheck
-// eslint-disable
 import { scope } from "arktype";
-import "@arktype/schema";
-export const Scope = scope({
-  LocalRuleSet: {
-    "path?": "string",
+import {} from "@arktype/schema";
+export const $ = scope({
+  ACMEDNS01AliDNSOptions: {
+    "access_key_id?": "string",
+    "access_key_secret?": "string",
+    "region_id?": "string",
   },
-  Prefix: "string",
-  HysteriaUser: {
-    "name?": "string",
-    "auth?": "integer[]",
-    "auth_str?": "string",
+  ACMEDNS01ChallengeOptions: [
+    [{ provider: "'alidns'" }, "&", "ACMEDNS01AliDNSOptions"],
+    "|",
+    [{ provider: "'cloudflare'" }, "&", "ACMEDNS01CloudflareOptions"],
+  ],
+  ACMEDNS01CloudflareOptions: {
+    "api_token?": "string",
   },
-  TorOutboundOptions: {
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-    "executable_path?": "string",
-    "extra_args?": "string[]",
-    "data_directory?": "string",
-    "torrc?": "object",
+  ACMEExternalAccountOptions: {
+    "key_id?": "string",
+    "mac_key?": "string",
   },
-  LogicalDNSRule: {
-    mode: "string",
-    "rules?": "DNSRule[]",
-    "invert?": "boolean",
-    "server?": "string",
-    "disable_cache?": "boolean",
-    "rewrite_ttl?": "integer",
-    "client_subnet?": "AddrPrefix",
-  },
-  HTTPProxyOptions: {
+  AddrPrefix: "string",
+  BrutalOptions: {
     "enabled?": "boolean",
-    server: "string",
-    server_port: "integer",
-    "bypass_domain?": "ListableString",
-    "match_domain?": "ListableString",
+    "up_mbps?": "integer",
+    "down_mbps?": "integer",
   },
-  V2RayAPIOptions: {
-    "listen?": "string",
-    "stats?": "V2RayStatsServiceOptions",
+  CacheFileOptions: {
+    "enabled?": "boolean",
+    "path?": "string",
+    "cache_id?": "string",
+    "store_fakeip?": "boolean",
+    "store_rdrc?": "boolean",
+    "rdrc_timeout?": "Duration",
   },
   ClashAPIOptions: {
     "external_controller?": "string",
@@ -64,10 +45,10 @@ export const Scope = scope({
     "store_selected?": "boolean",
     "store_fakeip?": "boolean",
   },
-  ACMEDNS01AliDNSOptions: {
-    "access_key_id?": "string",
-    "access_key_secret?": "string",
-    "region_id?": "string",
+  DNSFakeIPOptions: {
+    "enabled?": "boolean",
+    "inet4_range?": "Prefix",
+    "inet6_range?": "Prefix",
   },
   DNSOptions: {
     "servers?": "DNSServerOptions[]",
@@ -81,53 +62,106 @@ export const Scope = scope({
     "independent_cache?": "boolean",
     "client_subnet?": "AddrPrefix",
   },
-  WireGuardOutboundOptions: {
+  DNSQueryType: "integer | string",
+  DNSRule: [
+    [{ "type?": "'default'" }, "&", "DefaultDNSRule"],
+    "|",
+    [{ "type?": "'logical'" }, "&", "LogicalDNSRule"],
+  ],
+  DNSServerOptions: {
+    "tag?": "string",
+    address: "string",
+    "address_resolver?": "string",
+    "address_strategy?": "DomainStrategy",
+    "address_fallback_delay?": "Duration",
+    "strategy?": "DomainStrategy",
     "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-    "system_interface?": "boolean",
-    "gso?": "boolean",
-    "interface_name?": "string",
-    local_address: "ListablePrefix",
-    private_key: "string",
-    "peers?": "WireGuardPeer[]",
-    server: "string",
-    server_port: "integer",
-    peer_public_key: "string",
-    "pre_shared_key?": "string",
-    "reserved?": "integer[]",
-    "workers?": "integer",
-    "mtu?": "integer",
-    "network?": "NetworkList",
+    "client_subnet?": "AddrPrefix",
   },
-  InboundRealityHandshakeOptions: {
-    server: "string",
-    server_port: "integer",
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
+  DebugOptions: {
+    "listen?": "string",
+    "gc_percent?": "integer",
+    "max_stack?": "integer",
+    "max_threads?": "integer",
+    "panic_on_fault?": "boolean",
+    "trace_back?": "string",
+    "memory_limit?": "MemoryBytes",
+    "oom_killer?": "boolean",
   },
-  ShadowsocksInboundOptions: {
+  DefaultDNSRule: {
+    "inbound?": "string | string[]",
+    "ip_version?": "integer",
+    "query_type?": "DNSQueryType | DNSQueryType[]",
+    "network?": "string | string[]",
+    "auth_user?": "string | string[]",
+    "protocol?": "string | string[]",
+    "domain?": "string | string[]",
+    "domain_suffix?": "string | string[]",
+    "domain_keyword?": "string | string[]",
+    "domain_regex?": "string | string[]",
+    "geosite?": "string | string[]",
+    "source_geoip?": "string | string[]",
+    "geoip?": "string | string[]",
+    "ip_cidr?": "string | string[]",
+    "ip_is_private?": "boolean",
+    "source_ip_cidr?": "string | string[]",
+    "source_ip_is_private?": "boolean",
+    "source_port?": "integer | integer[]",
+    "source_port_range?": "string | string[]",
+    "port?": "integer | integer[]",
+    "port_range?": "string | string[]",
+    "process_name?": "string | string[]",
+    "process_path?": "string | string[]",
+    "package_name?": "string | string[]",
+    "user?": "string | string[]",
+    "user_id?": "integer | integer[]",
+    "outbound?": "string | string[]",
+    "clash_mode?": "string",
+    "wifi_ssid?": "string | string[]",
+    "wifi_bssid?": "string | string[]",
+    "rule_set?": "string | string[]",
+    "rule_set_ipcidr_match_source?": "boolean",
+    "invert?": "boolean",
+    "server?": "string",
+    "disable_cache?": "boolean",
+    "rewrite_ttl?": "integer",
+    "client_subnet?": "AddrPrefix",
+  },
+  DefaultRule: {
+    "inbound?": "string | string[]",
+    "ip_version?": "integer",
+    "network?": "string | string[]",
+    "auth_user?": "string | string[]",
+    "protocol?": "string | string[]",
+    "domain?": "string | string[]",
+    "domain_suffix?": "string | string[]",
+    "domain_keyword?": "string | string[]",
+    "domain_regex?": "string | string[]",
+    "geosite?": "string | string[]",
+    "source_geoip?": "string | string[]",
+    "geoip?": "string | string[]",
+    "source_ip_cidr?": "string | string[]",
+    "source_ip_is_private?": "boolean",
+    "ip_cidr?": "string | string[]",
+    "ip_is_private?": "boolean",
+    "source_port?": "integer | integer[]",
+    "source_port_range?": "string | string[]",
+    "port?": "integer | integer[]",
+    "port_range?": "string | string[]",
+    "process_name?": "string | string[]",
+    "process_path?": "string | string[]",
+    "package_name?": "string | string[]",
+    "user?": "string | string[]",
+    "user_id?": "integer | integer[]",
+    "clash_mode?": "string",
+    "wifi_ssid?": "string | string[]",
+    "wifi_bssid?": "string | string[]",
+    "rule_set?": "string | string[]",
+    "rule_set_ipcidr_match_source?": "boolean",
+    "invert?": "boolean",
+    "outbound?": "string",
+  },
+  DirectInboundOptions: {
     "listen?": "ListenAddress",
     "listen_port?": "integer",
     "tcp_fast_open?": "boolean",
@@ -143,47 +177,65 @@ export const Scope = scope({
     "domain_strategy?": "DomainStrategy",
     "udp_disable_domain_unmapping?": "boolean",
     "network?": "NetworkList",
-    method: "string",
-    "password?": "string",
-    "users?": "ShadowsocksUser[]",
-    "destinations?": "ShadowsocksDestination[]",
-    "multiplex?": "InboundMultiplexOptions",
+    "override_address?": "string",
+    "override_port?": "integer",
   },
-  DefaultRule: {
-    "inbound?": "ListableString",
-    "ip_version?": "integer",
-    "network?": "ListableString",
-    "auth_user?": "ListableString",
-    "protocol?": "ListableString",
-    "domain?": "ListableString",
-    "domain_suffix?": "ListableString",
-    "domain_keyword?": "ListableString",
-    "domain_regex?": "ListableString",
-    "geosite?": "ListableString",
-    "source_geoip?": "ListableString",
-    "geoip?": "ListableString",
-    "source_ip_cidr?": "ListableString",
-    "source_ip_is_private?": "boolean",
-    "ip_cidr?": "ListableString",
-    "ip_is_private?": "boolean",
-    "source_port?": "ListableInt",
-    "source_port_range?": "ListableString",
-    "port?": "ListableInt",
-    "port_range?": "ListableString",
-    "process_name?": "ListableString",
-    "process_path?": "ListableString",
-    "package_name?": "ListableString",
-    "user?": "ListableString",
-    "user_id?": "ListableInt",
-    "clash_mode?": "string",
-    "wifi_ssid?": "ListableString",
-    "wifi_bssid?": "ListableString",
-    "rule_set?": "ListableString",
-    "rule_set_ipcidr_match_source?": "boolean",
-    "invert?": "boolean",
-    "outbound?": "string",
+  DirectOutboundOptions: {
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+    "override_address?": "string",
+    "override_port?": "integer",
+    "proxy_protocol?": "integer",
   },
-  ListenAddress: "string",
+  DomainStrategy:
+    "'' | 'prefer_ipv4' | 'prefer_ipv6' | 'ipv4_only' | 'ipv6_only'",
+  Duration: "string",
+  ExperimentalOptions: {
+    "cache_file?": "CacheFileOptions",
+    "clash_api?": "ClashAPIOptions",
+    "v2ray_api?": "V2RayAPIOptions",
+    "debug?": "DebugOptions",
+  },
+  GeoIPOptions: {
+    "path?": "string",
+    "download_url?": "string",
+    "download_detour?": "string",
+  },
+  GeositeOptions: {
+    "path?": "string",
+    "download_url?": "string",
+    "download_detour?": "string",
+  },
+  HTTPMixedInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "users?": "User[]",
+    "set_system_proxy?": "boolean",
+    "tls?": "InboundTLSOptions",
+  },
   HTTPOutboundOptions: {
     "detour?": "string",
     "bind_interface?": "string",
@@ -204,13 +256,97 @@ export const Scope = scope({
     "password?": "string",
     "tls?": "OutboundTLSOptions",
     "path?": "string",
-    "headers?": "object",
+    "headers?": { ["string"]: "string | string[]" },
   },
-  ExperimentalOptions: {
-    "cache_file?": "CacheFileOptions",
-    "clash_api?": "ClashAPIOptions",
-    "v2ray_api?": "V2RayAPIOptions",
-    "debug?": "DebugOptions",
+  HTTPProxyOptions: {
+    "enabled?": "boolean",
+    server: "string",
+    server_port: "integer",
+    "bypass_domain?": "string | string[]",
+    "match_domain?": "string | string[]",
+  },
+  Hysteria2InboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "up_mbps?": "integer",
+    "down_mbps?": "integer",
+    "obfs?": "Hysteria2Obfs",
+    "users?": "Hysteria2User[]",
+    "ignore_client_bandwidth?": "boolean",
+    "tls?": "InboundTLSOptions",
+    "masquerade?": "string",
+    "brutal_debug?": "boolean",
+  },
+  Hysteria2Obfs: {
+    "type?": "string",
+    "password?": "string",
+  },
+  Hysteria2OutboundOptions: {
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+    server: "string",
+    server_port: "integer",
+    "up_mbps?": "integer",
+    "down_mbps?": "integer",
+    "obfs?": "Hysteria2Obfs",
+    "password?": "string",
+    "network?": "NetworkList",
+    "tls?": "OutboundTLSOptions",
+    "brutal_debug?": "boolean",
+  },
+  Hysteria2User: {
+    "name?": "string",
+    "password?": "string",
+  },
+  HysteriaInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "up?": "string",
+    "up_mbps?": "integer",
+    "down?": "string",
+    "down_mbps?": "integer",
+    "obfs?": "string",
+    "users?": "HysteriaUser[]",
+    "recv_window_conn?": "integer",
+    "recv_window_client?": "integer",
+    "max_conn_client?": "integer",
+    "disable_mtu_discovery?": "boolean",
+    "tls?": "InboundTLSOptions",
   },
   HysteriaOutboundOptions: {
     "detour?": "string",
@@ -241,10 +377,391 @@ export const Scope = scope({
     "network?": "NetworkList",
     "tls?": "OutboundTLSOptions",
   },
-  UDPOverTCPOptions: {
-    "enabled?": "boolean",
-    "version?": "integer",
+  HysteriaUser: {
+    "name?": "string",
+    "auth?": "integer[]",
+    "auth_str?": "string",
   },
+  Inbound: [
+    [
+      [
+        [
+          [
+            [
+              [
+                [
+                  [
+                    [
+                      [
+                        [
+                          [
+                            [
+                              [
+                                [
+                                  [
+                                    { type: "'direct'" },
+                                    "&",
+                                    "DirectInboundOptions",
+                                  ],
+                                  "|",
+                                  [
+                                    { type: "'http'" },
+                                    "&",
+                                    "HTTPMixedInboundOptions",
+                                  ],
+                                ],
+                                "|",
+                                [
+                                  { type: "'hysteria'" },
+                                  "&",
+                                  "HysteriaInboundOptions",
+                                ],
+                              ],
+                              "|",
+                              [
+                                { type: "'hysteria2'" },
+                                "&",
+                                "Hysteria2InboundOptions",
+                              ],
+                            ],
+                            "|",
+                            [
+                              { type: "'mixed'" },
+                              "&",
+                              "HTTPMixedInboundOptions",
+                            ],
+                          ],
+                          "|",
+                          [{ type: "'naive'" }, "&", "NaiveInboundOptions"],
+                        ],
+                        "|",
+                        [{ type: "'redirect'" }, "&", "RedirectInboundOptions"],
+                      ],
+                      "|",
+                      [
+                        { type: "'shadowsocks'" },
+                        "&",
+                        "ShadowsocksInboundOptions",
+                      ],
+                    ],
+                    "|",
+                    [{ type: "'shadowtls'" }, "&", "ShadowTLSInboundOptions"],
+                  ],
+                  "|",
+                  [{ type: "'socks'" }, "&", "SocksInboundOptions"],
+                ],
+                "|",
+                [{ type: "'tproxy'" }, "&", "TProxyInboundOptions"],
+              ],
+              "|",
+              [{ type: "'trojan'" }, "&", "TrojanInboundOptions"],
+            ],
+            "|",
+            [{ type: "'tuic'" }, "&", "TUICInboundOptions"],
+          ],
+          "|",
+          [{ type: "'tun'" }, "&", "TunInboundOptions"],
+        ],
+        "|",
+        [{ type: "'vless'" }, "&", "VLESSInboundOptions"],
+      ],
+      "|",
+      [{ type: "'vmess'" }, "&", "VMessInboundOptions"],
+    ],
+    "&",
+    { "tag?": "string" },
+  ],
+  InboundACMEOptions: {
+    "domain?": "string | string[]",
+    "data_directory?": "string",
+    "default_server_name?": "string",
+    "email?": "string",
+    "provider?": "string",
+    "disable_http_challenge?": "boolean",
+    "disable_tls_alpn_challenge?": "boolean",
+    "alternative_http_port?": "integer",
+    "alternative_tls_port?": "integer",
+    "external_account?": "ACMEExternalAccountOptions",
+    "dns01_challenge?": "ACMEDNS01ChallengeOptions",
+  },
+  InboundECHOptions: {
+    "enabled?": "boolean",
+    "pq_signature_schemes_enabled?": "boolean",
+    "dynamic_record_sizing_disabled?": "boolean",
+    "key?": "string | string[]",
+    "key_path?": "string",
+  },
+  InboundMultiplexOptions: {
+    "enabled?": "boolean",
+    "padding?": "boolean",
+    "brutal?": "BrutalOptions",
+  },
+  InboundRealityHandshakeOptions: {
+    server: "string",
+    server_port: "integer",
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+  },
+  InboundRealityOptions: {
+    "enabled?": "boolean",
+    "handshake?": "InboundRealityHandshakeOptions",
+    "private_key?": "string",
+    "short_id?": "string | string[]",
+    "max_time_difference?": "Duration",
+  },
+  InboundTLSOptions: {
+    "enabled?": "boolean",
+    "server_name?": "string",
+    "insecure?": "boolean",
+    "alpn?": "string | string[]",
+    "min_version?": "string",
+    "max_version?": "string",
+    "cipher_suites?": "string | string[]",
+    "certificate?": "string | string[]",
+    "certificate_path?": "string",
+    "key?": "string | string[]",
+    "key_path?": "string",
+    "acme?": "InboundACMEOptions",
+    "ech?": "InboundECHOptions",
+    "reality?": "InboundRealityOptions",
+  },
+  ListenAddress: "string",
+  LocalRuleSet: {
+    "path?": "string",
+  },
+  LogOptions: {
+    "disabled?": "boolean",
+    "level?": "string",
+    "output?": "string",
+    "timestamp?": "boolean",
+  },
+  LogicalDNSRule: {
+    mode: "string",
+    "rules?": "DNSRule[]",
+    "invert?": "boolean",
+    "server?": "string",
+    "disable_cache?": "boolean",
+    "rewrite_ttl?": "integer",
+    "client_subnet?": "AddrPrefix",
+  },
+  LogicalRule: {
+    mode: "string",
+    "rules?": "Rule[]",
+    "invert?": "boolean",
+    "outbound?": "string",
+  },
+  MemoryBytes: "integer",
+  NTPOptions: {
+    "enabled?": "boolean",
+    "interval?": "Duration",
+    "write_to_system?": "boolean",
+    server: "string",
+    server_port: "integer",
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+  },
+  NaiveInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "users?": "User[]",
+    "network?": "NetworkList",
+    "tls?": "InboundTLSOptions",
+  },
+  NetworkList: "'tcp' | 'udp'",
+  Options: {
+    "$schema?": "string",
+    "log?": "LogOptions",
+    "dns?": "DNSOptions",
+    "ntp?": "NTPOptions",
+    "inbounds?": "Inbound[]",
+    "outbounds?": "Outbound[]",
+    "route?": "RouteOptions",
+    "experimental?": "ExperimentalOptions",
+  },
+  Outbound: [
+    [
+      [
+        [
+          [
+            [
+              [
+                [
+                  [
+                    [
+                      [
+                        [
+                          [
+                            [
+                              [
+                                [
+                                  [
+                                    [
+                                      [
+                                        { "type?": "'block'" },
+                                        "|",
+                                        [
+                                          { "type?": "'direct'" },
+                                          "&",
+                                          "DirectOutboundOptions",
+                                        ],
+                                      ],
+                                      "|",
+                                      { "type?": "'dns'" },
+                                    ],
+                                    "|",
+                                    [
+                                      { "type?": "'http'" },
+                                      "&",
+                                      "HTTPOutboundOptions",
+                                    ],
+                                  ],
+                                  "|",
+                                  [
+                                    { "type?": "'hysteria'" },
+                                    "&",
+                                    "HysteriaOutboundOptions",
+                                  ],
+                                ],
+                                "|",
+                                [
+                                  { "type?": "'hysteria2'" },
+                                  "&",
+                                  "Hysteria2OutboundOptions",
+                                ],
+                              ],
+                              "|",
+                              [
+                                { "type?": "'selector'" },
+                                "&",
+                                "SelectorOutboundOptions",
+                              ],
+                            ],
+                            "|",
+                            [
+                              { "type?": "'shadowsocks'" },
+                              "&",
+                              "ShadowsocksOutboundOptions",
+                            ],
+                          ],
+                          "|",
+                          [
+                            { "type?": "'shadowsocksr'" },
+                            "&",
+                            "ShadowsocksROutboundOptions",
+                          ],
+                        ],
+                        "|",
+                        [
+                          { "type?": "'shadowtls'" },
+                          "&",
+                          "ShadowTLSOutboundOptions",
+                        ],
+                      ],
+                      "|",
+                      [{ "type?": "'socks'" }, "&", "SocksOutboundOptions"],
+                    ],
+                    "|",
+                    [{ "type?": "'ssh'" }, "&", "SSHOutboundOptions"],
+                  ],
+                  "|",
+                  [{ "type?": "'tor'" }, "&", "TorOutboundOptions"],
+                ],
+                "|",
+                [{ "type?": "'trojan'" }, "&", "TrojanOutboundOptions"],
+              ],
+              "|",
+              [{ "type?": "'tuic'" }, "&", "TUICOutboundOptions"],
+            ],
+            "|",
+            [{ "type?": "'urltest'" }, "&", "URLTestOutboundOptions"],
+          ],
+          "|",
+          [{ "type?": "'vless'" }, "&", "VLESSOutboundOptions"],
+        ],
+        "|",
+        [{ "type?": "'vmess'" }, "&", "VMessOutboundOptions"],
+      ],
+      "|",
+      [{ "type?": "'wireguard'" }, "&", "WireGuardOutboundOptions"],
+    ],
+    "&",
+    { "tag?": "string" },
+  ],
+  OutboundECHOptions: {
+    "enabled?": "boolean",
+    "pq_signature_schemes_enabled?": "boolean",
+    "dynamic_record_sizing_disabled?": "boolean",
+    "config?": "string | string[]",
+    "config_path?": "string",
+  },
+  OutboundMultiplexOptions: {
+    "enabled?": "boolean",
+    "protocol?": "string",
+    "max_connections?": "integer",
+    "min_streams?": "integer",
+    "max_streams?": "integer",
+    "padding?": "boolean",
+    "brutal?": "BrutalOptions",
+  },
+  OutboundRealityOptions: {
+    "enabled?": "boolean",
+    "public_key?": "string",
+    "short_id?": "string",
+  },
+  OutboundTLSOptions: {
+    "enabled?": "boolean",
+    "disable_sni?": "boolean",
+    "server_name?": "string",
+    "insecure?": "boolean",
+    "alpn?": "string | string[]",
+    "min_version?": "string",
+    "max_version?": "string",
+    "cipher_suites?": "string | string[]",
+    "certificate?": "string | string[]",
+    "certificate_path?": "string",
+    "ech?": "OutboundECHOptions",
+    "utls?": "OutboundUTLSOptions",
+    "reality?": "OutboundRealityOptions",
+  },
+  OutboundUTLSOptions: {
+    "enabled?": "boolean",
+    "fingerprint?": "string",
+  },
+  Prefix: "string",
   RedirectInboundOptions: {
     "listen?": "ListenAddress",
     "listen_port?": "integer",
@@ -260,6 +777,186 @@ export const Scope = scope({
     "sniff_timeout?": "Duration",
     "domain_strategy?": "DomainStrategy",
     "udp_disable_domain_unmapping?": "boolean",
+  },
+  RemoteRuleSet: {
+    url: "string",
+    "download_detour?": "string",
+    "update_interval?": "Duration",
+  },
+  RouteOptions: {
+    "geoip?": "GeoIPOptions",
+    "geosite?": "GeositeOptions",
+    "rules?": "Rule[]",
+    "rule_set?": "RuleSet[]",
+    "final?": "string",
+    "find_process?": "boolean",
+    "auto_detect_interface?": "boolean",
+    "override_android_vpn?": "boolean",
+    "default_interface?": "string",
+    "default_mark?": "integer",
+  },
+  Rule: [
+    [{ "type?": "'default'" }, "&", "DefaultRule"],
+    "|",
+    [{ "type?": "'logical'" }, "&", "LogicalRule"],
+  ],
+  RuleSet: [
+    [
+      [{ type: "'local'" }, "&", "LocalRuleSet"],
+      "|",
+      [{ type: "'remote'" }, "&", "RemoteRuleSet"],
+    ],
+    "&",
+    { "tag?": "string", format: "string" },
+  ],
+  SSHOutboundOptions: {
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+    server: "string",
+    server_port: "integer",
+    "user?": "string",
+    "password?": "string",
+    "private_key?": "string | string[]",
+    "private_key_path?": "string",
+    "private_key_passphrase?": "string",
+    "host_key?": "string | string[]",
+    "host_key_algorithms?": "string | string[]",
+    "client_version?": "string",
+  },
+  SelectorOutboundOptions: {
+    outbounds: "string[]",
+    "default?": "string",
+    "interrupt_exist_connections?": "boolean",
+  },
+  ServerOptions: {
+    server: "string",
+    server_port: "integer",
+  },
+  ShadowTLSHandshakeOptions: {
+    server: "string",
+    server_port: "integer",
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+  },
+  ShadowTLSInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "version?": "integer",
+    "password?": "string",
+    "users?": "ShadowTLSUser[]",
+    "handshake?": "ShadowTLSHandshakeOptions",
+    "handshake_for_server_name?": { ["string"]: "ShadowTLSHandshakeOptions" },
+    "strict_mode?": "boolean",
+  },
+  ShadowTLSOutboundOptions: {
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+    server: "string",
+    server_port: "integer",
+    "version?": "integer",
+    "password?": "string",
+    "tls?": "OutboundTLSOptions",
+  },
+  ShadowTLSUser: {
+    "name?": "string",
+    "password?": "string",
+  },
+  ShadowsocksDestination: {
+    name: "string",
+    password: "string",
+    server: "string",
+    server_port: "integer",
+  },
+  ShadowsocksInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "network?": "NetworkList",
+    method: "string",
+    "password?": "string",
+    "users?": "ShadowsocksUser[]",
+    "destinations?": "ShadowsocksDestination[]",
+    "multiplex?": "InboundMultiplexOptions",
+  },
+  ShadowsocksOutboundOptions: {
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+    server: "string",
+    server_port: "integer",
+    method: "string",
+    password: "string",
+    "plugin?": "string",
+    "plugin_opts?": "string",
+    "network?": "NetworkList",
+    "udp_over_tcp?": "UDPOverTCPOptions",
+    "multiplex?": "OutboundMultiplexOptions",
   },
   ShadowsocksROutboundOptions: {
     "detour?": "string",
@@ -285,9 +982,87 @@ export const Scope = scope({
     "protocol_param?": "string",
     "network?": "NetworkList",
   },
-  ServerOptions: {
+  ShadowsocksUser: {
+    name: "string",
+    password: "string",
+  },
+  SocksInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "users?": "User[]",
+  },
+  SocksOutboundOptions: {
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
     server: "string",
     server_port: "integer",
+    "version?": "string",
+    "username?": "string",
+    "password?": "string",
+    "network?": "NetworkList",
+    "udp_over_tcp?": "UDPOverTCPOptions",
+  },
+  TProxyInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "network?": "NetworkList",
+  },
+  TUICInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "users?": "TUICUser[]",
+    "congestion_control?": "string",
+    "auth_timeout?": "Duration",
+    "zero_rtt_handshake?": "boolean",
+    "heartbeat?": "Duration",
+    "tls?": "InboundTLSOptions",
   },
   TUICOutboundOptions: {
     "detour?": "string",
@@ -315,52 +1090,31 @@ export const Scope = scope({
     "network?": "NetworkList",
     "tls?": "OutboundTLSOptions",
   },
-  NetworkList: "integer",
-  DefaultDNSRule: {
-    "inbound?": "ListableString",
-    "ip_version?": "integer",
-    "query_type?": "ListableDNSQueryType",
-    "network?": "ListableString",
-    "auth_user?": "ListableString",
-    "protocol?": "ListableString",
-    "domain?": "ListableString",
-    "domain_suffix?": "ListableString",
-    "domain_keyword?": "ListableString",
-    "domain_regex?": "ListableString",
-    "geosite?": "ListableString",
-    "source_geoip?": "ListableString",
-    "geoip?": "ListableString",
-    "ip_cidr?": "ListableString",
-    "ip_is_private?": "boolean",
-    "source_ip_cidr?": "ListableString",
-    "source_ip_is_private?": "boolean",
-    "source_port?": "ListableInt",
-    "source_port_range?": "ListableString",
-    "port?": "ListableInt",
-    "port_range?": "ListableString",
-    "process_name?": "ListableString",
-    "process_path?": "ListableString",
-    "package_name?": "ListableString",
-    "user?": "ListableString",
-    "user_id?": "ListableInt",
-    "outbound?": "ListableString",
-    "clash_mode?": "string",
-    "wifi_ssid?": "ListableString",
-    "wifi_bssid?": "ListableString",
-    "rule_set?": "ListableString",
-    "rule_set_ipcidr_match_source?": "boolean",
-    "invert?": "boolean",
-    "server?": "string",
-    "disable_cache?": "boolean",
-    "rewrite_ttl?": "integer",
-    "client_subnet?": "AddrPrefix",
+  TUICUser: {
+    "name?": "string",
+    "uuid?": "string",
+    "password?": "string",
   },
-  OutboundRealityOptions: {
-    "enabled?": "boolean",
-    "public_key?": "string",
-    "short_id?": "string",
+  TorOutboundOptions: {
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+    "executable_path?": "string",
+    "extra_args?": "string[]",
+    "data_directory?": "string",
+    "torrc?": { ["string"]: "string" },
   },
-  Hysteria2InboundOptions: {
+  TrojanInboundOptions: {
     "listen?": "ListenAddress",
     "listen_port?": "integer",
     "tcp_fast_open?": "boolean",
@@ -375,98 +1129,14 @@ export const Scope = scope({
     "sniff_timeout?": "Duration",
     "domain_strategy?": "DomainStrategy",
     "udp_disable_domain_unmapping?": "boolean",
-    "up_mbps?": "integer",
-    "down_mbps?": "integer",
-    "obfs?": "Hysteria2Obfs",
-    "users?": "Hysteria2User[]",
-    "ignore_client_bandwidth?": "boolean",
+    "users?": "TrojanUser[]",
     "tls?": "InboundTLSOptions",
-    "masquerade?": "string",
-    "brutal_debug?": "boolean",
+    "fallback?": "ServerOptions",
+    "fallback_for_alpn?": { ["string"]: "ServerOptions" },
+    "multiplex?": "InboundMultiplexOptions",
+    "transport?": "V2RayTransportOptions",
   },
-  VLESSUser: {
-    name: "string",
-    uuid: "string",
-    "flow?": "string",
-  },
-  Inbound: [
-    [
-      [
-        [
-          [
-            [
-              [
-                [
-                  [
-                    [
-                      [
-                        [
-                          [
-                            [
-                              [
-                                [
-                                  [
-                                    { type: "'vmess'" },
-                                    "&",
-                                    "VMessInboundOptions",
-                                  ],
-                                  "|",
-                                  [
-                                    { type: "'hysteria'" },
-                                    "&",
-                                    "HysteriaInboundOptions",
-                                  ],
-                                ],
-                                "|",
-                                [
-                                  { type: "'vless'" },
-                                  "&",
-                                  "VLESSInboundOptions",
-                                ],
-                              ],
-                              "|",
-                              [{ type: "'tuic'" }, "&", "TUICInboundOptions"],
-                            ],
-                            "|",
-                            [{ type: "'direct'" }, "&", "DirectInboundOptions"],
-                          ],
-                          "|",
-                          [{ type: "'http'" }, "&", "HTTPMixedInboundOptions"],
-                        ],
-                        "|",
-                        [{ type: "'mixed'" }, "&", "HTTPMixedInboundOptions"],
-                      ],
-                      "|",
-                      [{ type: "'trojan'" }, "&", "TrojanInboundOptions"],
-                    ],
-                    "|",
-                    [{ type: "'naive'" }, "&", "NaiveInboundOptions"],
-                  ],
-                  "|",
-                  [{ type: "'shadowtls'" }, "&", "ShadowTLSInboundOptions"],
-                ],
-                "|",
-                [{ type: "'hysteria2'" }, "&", "Hysteria2InboundOptions"],
-              ],
-              "|",
-              [{ type: "'socks'" }, "&", "SocksInboundOptions"],
-            ],
-            "|",
-            [{ type: "'redirect'" }, "&", "RedirectInboundOptions"],
-          ],
-          "|",
-          [{ type: "'tproxy'" }, "&", "TProxyInboundOptions"],
-        ],
-        "|",
-        [{ type: "'shadowsocks'" }, "&", "ShadowsocksInboundOptions"],
-      ],
-      "|",
-      [{ type: "'tun'" }, "&", "TunInboundOptions"],
-    ],
-    "&",
-    { "tag?": "string" },
-  ],
-  ShadowsocksOutboundOptions: {
+  TrojanOutboundOptions: {
     "detour?": "string",
     "bind_interface?": "string",
     "inet4_bind_address?": "ListenAddress",
@@ -482,326 +1152,67 @@ export const Scope = scope({
     "fallback_delay?": "Duration",
     server: "string",
     server_port: "integer",
-    method: "string",
     password: "string",
-    "plugin?": "string",
-    "plugin_opts?": "string",
     "network?": "NetworkList",
-    "udp_over_tcp?": "UDPOverTCPOptions",
+    "tls?": "OutboundTLSOptions",
     "multiplex?": "OutboundMultiplexOptions",
-  },
-  Outbound: [
-    [
-      [
-        [
-          [
-            [
-              [
-                [
-                  [
-                    [
-                      [
-                        [
-                          [
-                            [
-                              [
-                                [
-                                  [
-                                    [
-                                      [
-                                        { "type?": "'block'" },
-                                        "|",
-                                        [
-                                          { "type?": "'trojan'" },
-                                          "&",
-                                          "TrojanOutboundOptions",
-                                        ],
-                                      ],
-                                      "|",
-                                      [
-                                        { "type?": "'ssh'" },
-                                        "&",
-                                        "SSHOutboundOptions",
-                                      ],
-                                    ],
-                                    "|",
-                                    [
-                                      { "type?": "'shadowsocksr'" },
-                                      "&",
-                                      "ShadowsocksROutboundOptions",
-                                    ],
-                                  ],
-                                  "|",
-                                  [
-                                    { "type?": "'hysteria2'" },
-                                    "&",
-                                    "Hysteria2OutboundOptions",
-                                  ],
-                                ],
-                                "|",
-                                [
-                                  { "type?": "'selector'" },
-                                  "&",
-                                  "SelectorOutboundOptions",
-                                ],
-                              ],
-                              "|",
-                              [
-                                { "type?": "'http'" },
-                                "&",
-                                "HTTPOutboundOptions",
-                              ],
-                            ],
-                            "|",
-                            [
-                              { "type?": "'shadowsocks'" },
-                              "&",
-                              "ShadowsocksOutboundOptions",
-                            ],
-                          ],
-                          "|",
-                          [
-                            { "type?": "'hysteria'" },
-                            "&",
-                            "HysteriaOutboundOptions",
-                          ],
-                        ],
-                        "|",
-                        [{ "type?": "'tor'" }, "&", "TorOutboundOptions"],
-                      ],
-                      "|",
-                      [{ "type?": "'direct'" }, "&", "DirectOutboundOptions"],
-                    ],
-                    "|",
-                    [
-                      { "type?": "'wireguard'" },
-                      "&",
-                      "WireGuardOutboundOptions",
-                    ],
-                  ],
-                  "|",
-                  [{ "type?": "'shadowtls'" }, "&", "ShadowTLSOutboundOptions"],
-                ],
-                "|",
-                { "type?": "'dns'" },
-              ],
-              "|",
-              [{ "type?": "'socks'" }, "&", "SocksOutboundOptions"],
-            ],
-            "|",
-            [{ "type?": "'vmess'" }, "&", "VMessOutboundOptions"],
-          ],
-          "|",
-          [{ "type?": "'vless'" }, "&", "VLESSOutboundOptions"],
-        ],
-        "|",
-        [{ "type?": "'tuic'" }, "&", "TUICOutboundOptions"],
-      ],
-      "|",
-      [{ "type?": "'urltest'" }, "&", "URLTestOutboundOptions"],
-    ],
-    "&",
-    { "tag?": "string" },
-  ],
-  GeositeOptions: {
-    "path?": "string",
-    "download_url?": "string",
-    "download_detour?": "string",
-  },
-  InboundTLSOptions: {
-    "enabled?": "boolean",
-    "server_name?": "string",
-    "insecure?": "boolean",
-    "alpn?": "ListableString",
-    "min_version?": "string",
-    "max_version?": "string",
-    "cipher_suites?": "ListableString",
-    "certificate?": "ListableString",
-    "certificate_path?": "string",
-    "key?": "ListableString",
-    "key_path?": "string",
-    "acme?": "InboundACMEOptions",
-    "ech?": "InboundECHOptions",
-    "reality?": "InboundRealityOptions",
-  },
-  V2RayStatsServiceOptions: {
-    "enabled?": "boolean",
-    "inbounds?": "string[]",
-    "outbounds?": "string[]",
-    "users?": "string[]",
-  },
-  VMessUser: {
-    name: "string",
-    uuid: "string",
-    "alterId?": "integer",
+    "transport?": "V2RayTransportOptions",
   },
   TrojanUser: {
     name: "string",
     password: "string",
   },
-  Hysteria2Obfs: {
-    "type?": "string",
-    "password?": "string",
-  },
-  VMessInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
+  TunInboundOptions: {
+    "interface_name?": "string",
+    "mtu?": "integer",
+    "gso?": "boolean",
+    "inet4_address?": "string | string[]",
+    "inet6_address?": "string | string[]",
+    "auto_route?": "boolean",
+    "strict_route?": "boolean",
+    "inet4_route_address?": "string | string[]",
+    "inet6_route_address?": "string | string[]",
+    "inet4_route_exclude_address?": "string | string[]",
+    "inet6_route_exclude_address?": "string | string[]",
+    "include_interface?": "string | string[]",
+    "exclude_interface?": "string | string[]",
+    "include_uid?": "integer | integer[]",
+    "include_uid_range?": "string | string[]",
+    "exclude_uid?": "integer | integer[]",
+    "exclude_uid_range?": "string | string[]",
+    "include_android_user?": "integer | integer[]",
+    "include_package?": "string | string[]",
+    "exclude_package?": "string | string[]",
+    "endpoint_independent_nat?": "boolean",
     "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
+    "stack?": "string",
+    "platform?": "TunPlatformOptions",
     "sniff?": "boolean",
     "sniff_override_destination?": "boolean",
     "sniff_timeout?": "Duration",
     "domain_strategy?": "DomainStrategy",
     "udp_disable_domain_unmapping?": "boolean",
-    "users?": "VMessUser[]",
-    "tls?": "InboundTLSOptions",
-    "multiplex?": "InboundMultiplexOptions",
-    "transport?": "V2RayTransportOptions",
   },
-  ShadowsocksDestination: {
-    name: "string",
-    password: "string",
-    server: "string",
-    server_port: "integer",
+  TunPlatformOptions: {
+    "http_proxy?": "HTTPProxyOptions",
   },
-  DNSRule: [
-    [{ "type?": "'default'" }, "&", "DefaultDNSRule"],
-    "|",
-    [{ "type?": "'logical'" }, "&", "LogicalDNSRule"],
-  ],
-  ACMEExternalAccountOptions: {
-    "key_id?": "string",
-    "mac_key?": "string",
-  },
-  OutboundMultiplexOptions: {
+  UDPOverTCPOptions: {
     "enabled?": "boolean",
-    "protocol?": "string",
-    "max_connections?": "integer",
-    "min_streams?": "integer",
-    "max_streams?": "integer",
-    "padding?": "boolean",
-    "brutal?": "BrutalOptions",
-  },
-  HTTPMixedInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "users?": "User[]",
-    "set_system_proxy?": "boolean",
-    "tls?": "InboundTLSOptions",
-  },
-  ShadowTLSOutboundOptions: {
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-    server: "string",
-    server_port: "integer",
     "version?": "integer",
-    "password?": "string",
-    "tls?": "OutboundTLSOptions",
   },
-  ACMEDNS01ChallengeOptions: [
-    [{ provider: "'alidns'" }, "&", "ACMEDNS01AliDNSOptions"],
-    "|",
-    [{ provider: "'cloudflare'" }, "&", "ACMEDNS01CloudflareOptions"],
-  ],
-  Hysteria2OutboundOptions: {
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-    server: "string",
-    server_port: "integer",
-    "up_mbps?": "integer",
-    "down_mbps?": "integer",
-    "obfs?": "Hysteria2Obfs",
-    "password?": "string",
-    "network?": "NetworkList",
-    "tls?": "OutboundTLSOptions",
-    "brutal_debug?": "boolean",
-  },
-  MemoryBytes: "integer",
-  RouteOptions: {
-    "geoip?": "GeoIPOptions",
-    "geosite?": "GeositeOptions",
-    "rules?": "Rule[]",
-    "rule_set?": "RuleSet[]",
-    "final?": "string",
-    "find_process?": "boolean",
-    "auto_detect_interface?": "boolean",
-    "override_android_vpn?": "boolean",
-    "default_interface?": "string",
-    "default_mark?": "integer",
-  },
-  CacheFileOptions: {
-    "enabled?": "boolean",
-    "path?": "string",
-    "cache_id?": "string",
-    "store_fakeip?": "boolean",
-    "store_rdrc?": "boolean",
-    "rdrc_timeout?": "Duration",
-  },
-  NaiveInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "users?": "User[]",
-    "network?": "NetworkList",
-    "tls?": "InboundTLSOptions",
-  },
-  V2RayHTTPOptions: {
-    "host?": "ListableString",
-    "path?": "string",
-    "method?": "string",
-    "headers?": "object",
+  UDPTimeoutCompat: "string",
+  URLTestOutboundOptions: {
+    outbounds: "string[]",
+    "url?": "string",
+    "interval?": "Duration",
+    "tolerance?": "integer",
     "idle_timeout?": "Duration",
-    "ping_timeout?": "Duration",
+    "interrupt_exist_connections?": "boolean",
+  },
+  User: { username: "string", password: "string" },
+  V2RayAPIOptions: {
+    "listen?": "string",
+    "stats?": "V2RayStatsServiceOptions",
   },
   V2RayGRPCOptions: {
     "service_name?": "string",
@@ -809,23 +1220,69 @@ export const Scope = scope({
     "ping_timeout?": "Duration",
     "permit_without_stream?": "boolean",
   },
-  Duration: "string",
-  User: { username: "string", password: "string" },
-  Hysteria2User: {
-    "name?": "string",
-    "password?": "string",
+  V2RayHTTPOptions: {
+    "host?": "string | string[]",
+    "path?": "string",
+    "method?": "string",
+    "headers?": { ["string"]: "string | string[]" },
+    "idle_timeout?": "Duration",
+    "ping_timeout?": "Duration",
   },
-  Options: {
-    "$schema?": "string",
-    "log?": "LogOptions",
-    "dns?": "DNSOptions",
-    "ntp?": "NTPOptions",
-    "inbounds?": "Inbound[]",
-    "outbounds?": "Outbound[]",
-    "route?": "RouteOptions",
-    "experimental?": "ExperimentalOptions",
+  V2RayHTTPUpgradeOptions: {
+    "host?": "string",
+    "path?": "string",
+    "headers?": { ["string"]: "string | string[]" },
   },
-  AddrPrefix: "string",
+  V2RayQUICOptions: {},
+  V2RayStatsServiceOptions: {
+    "enabled?": "boolean",
+    "inbounds?": "string[]",
+    "outbounds?": "string[]",
+    "users?": "string[]",
+  },
+  V2RayTransportOptions: [
+    [
+      [
+        [
+          [{ type: "'grpc'" }, "&", "V2RayGRPCOptions"],
+          "|",
+          [{ type: "'http'" }, "&", "V2RayHTTPOptions"],
+        ],
+        "|",
+        [{ type: "'httpupgrade'" }, "&", "V2RayHTTPUpgradeOptions"],
+      ],
+      "|",
+      [{ type: "'quic'" }, "&", "V2RayQUICOptions"],
+    ],
+    "|",
+    [{ type: "'ws'" }, "&", "V2RayWebsocketOptions"],
+  ],
+  V2RayWebsocketOptions: {
+    "path?": "string",
+    "headers?": { ["string"]: "string | string[]" },
+    "max_early_data?": "integer",
+    "early_data_header_name?": "string",
+  },
+  VLESSInboundOptions: {
+    "listen?": "ListenAddress",
+    "listen_port?": "integer",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "udp_timeout?": "UDPTimeoutCompat",
+    "proxy_protocol?": "boolean",
+    "proxy_protocol_accept_no_header?": "boolean",
+    "detour?": "string",
+    "sniff?": "boolean",
+    "sniff_override_destination?": "boolean",
+    "sniff_timeout?": "Duration",
+    "domain_strategy?": "DomainStrategy",
+    "udp_disable_domain_unmapping?": "boolean",
+    "users?": "VLESSUser[]",
+    "tls?": "InboundTLSOptions",
+    "multiplex?": "InboundMultiplexOptions",
+    "transport?": "V2RayTransportOptions",
+  },
   VLESSOutboundOptions: {
     "detour?": "string",
     "bind_interface?": "string",
@@ -850,492 +1307,12 @@ export const Scope = scope({
     "transport?": "V2RayTransportOptions",
     "packet_encoding?": "string",
   },
-  WireGuardPeer: {
-    server: "string",
-    server_port: "integer",
-    "public_key?": "string",
-    "pre_shared_key?": "string",
-    "allowed_ips?": "ListableString",
-    "reserved?": "integer[]",
-  },
-  TUICUser: {
-    "name?": "string",
-    "uuid?": "string",
-    "password?": "string",
-  },
-  V2RayHTTPUpgradeOptions: {
-    "host?": "string",
-    "path?": "string",
-    "headers?": "object",
-  },
-  SocksOutboundOptions: {
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-    server: "string",
-    server_port: "integer",
-    "version?": "string",
-    "username?": "string",
-    "password?": "string",
-    "network?": "NetworkList",
-    "udp_over_tcp?": "UDPOverTCPOptions",
-  },
-  ListableInt: ["integer", "|", "integer[]"],
-  ListablePrefix: ["string", "|", "string[]"],
-  RemoteRuleSet: {
-    url: "string",
-    "download_detour?": "string",
-    "update_interval?": "Duration",
-  },
-  TrojanInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "users?": "TrojanUser[]",
-    "tls?": "InboundTLSOptions",
-    "fallback?": "ServerOptions",
-    "fallback_for_alpn?": "object",
-    "multiplex?": "InboundMultiplexOptions",
-    "transport?": "V2RayTransportOptions",
-  },
-  ACMEDNS01CloudflareOptions: {
-    "api_token?": "string",
-  },
-  InboundRealityOptions: {
-    "enabled?": "boolean",
-    "handshake?": "InboundRealityHandshakeOptions",
-    "private_key?": "string",
-    "short_id?": "ListableString",
-    "max_time_difference?": "Duration",
-  },
-  DomainStrategy:
-    "'' | 'prefer_ipv4' | 'prefer_ipv6' | 'ipv4_only' | 'ipv6_only'",
-  ShadowTLSUser: {
-    "name?": "string",
-    "password?": "string",
-  },
-  SSHOutboundOptions: {
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-    server: "string",
-    server_port: "integer",
-    "user?": "string",
-    "password?": "string",
-    "private_key?": "ListableString",
-    "private_key_path?": "string",
-    "private_key_passphrase?": "string",
-    "host_key?": "ListableString",
-    "host_key_algorithms?": "ListableString",
-    "client_version?": "string",
-  },
-  ListableString: ["string", "|", "string[]"],
-  ListableDNSQueryType: ["DNSQueryType", "|", "DNSQueryType[]"],
-  TunPlatformOptions: {
-    "http_proxy?": "HTTPProxyOptions",
-  },
-  TUICInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "users?": "TUICUser[]",
-    "congestion_control?": "string",
-    "auth_timeout?": "Duration",
-    "zero_rtt_handshake?": "boolean",
-    "heartbeat?": "Duration",
-    "tls?": "InboundTLSOptions",
-  },
-  VLESSInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "users?": "VLESSUser[]",
-    "tls?": "InboundTLSOptions",
-    "multiplex?": "InboundMultiplexOptions",
-    "transport?": "V2RayTransportOptions",
-  },
-  InboundMultiplexOptions: {
-    "enabled?": "boolean",
-    "padding?": "boolean",
-    "brutal?": "BrutalOptions",
-  },
-  BrutalOptions: {
-    "enabled?": "boolean",
-    "up_mbps?": "integer",
-    "down_mbps?": "integer",
-  },
-  SelectorOutboundOptions: {
-    outbounds: "string[]",
-    "default?": "string",
-    "interrupt_exist_connections?": "boolean",
-  },
-  UDPTimeoutCompat: "string",
-  SocksInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "users?": "User[]",
-  },
-  ShadowTLSInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "version?": "integer",
-    "password?": "string",
-    "users?": "ShadowTLSUser[]",
-    "handshake?": "ShadowTLSHandshakeOptions",
-    "handshake_for_server_name?": "object",
-    "strict_mode?": "boolean",
-  },
-  TProxyInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "network?": "NetworkList",
-  },
-  LogOptions: {
-    "disabled?": "boolean",
-    "level?": "string",
-    "output?": "string",
-    "timestamp?": "boolean",
-  },
-  TunInboundOptions: {
-    "interface_name?": "string",
-    "mtu?": "integer",
-    "gso?": "boolean",
-    "inet4_address?": "ListablePrefix",
-    "inet6_address?": "ListablePrefix",
-    "auto_route?": "boolean",
-    "strict_route?": "boolean",
-    "inet4_route_address?": "ListablePrefix",
-    "inet6_route_address?": "ListablePrefix",
-    "inet4_route_exclude_address?": "ListablePrefix",
-    "inet6_route_exclude_address?": "ListablePrefix",
-    "include_interface?": "ListableString",
-    "exclude_interface?": "ListableString",
-    "include_uid?": "ListableInt",
-    "include_uid_range?": "ListableString",
-    "exclude_uid?": "ListableInt",
-    "exclude_uid_range?": "ListableString",
-    "include_android_user?": "ListableInt",
-    "include_package?": "ListableString",
-    "exclude_package?": "ListableString",
-    "endpoint_independent_nat?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "stack?": "string",
-    "platform?": "TunPlatformOptions",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-  },
-  OutboundTLSOptions: {
-    "enabled?": "boolean",
-    "disable_sni?": "boolean",
-    "server_name?": "string",
-    "insecure?": "boolean",
-    "alpn?": "ListableString",
-    "min_version?": "string",
-    "max_version?": "string",
-    "cipher_suites?": "ListableString",
-    "certificate?": "ListableString",
-    "certificate_path?": "string",
-    "ech?": "OutboundECHOptions",
-    "utls?": "OutboundUTLSOptions",
-    "reality?": "OutboundRealityOptions",
-  },
-  GeoIPOptions: {
-    "path?": "string",
-    "download_url?": "string",
-    "download_detour?": "string",
-  },
-  HysteriaInboundOptions: {
-    "listen?": "ListenAddress",
-    "listen_port?": "integer",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "udp_timeout?": "UDPTimeoutCompat",
-    "proxy_protocol?": "boolean",
-    "proxy_protocol_accept_no_header?": "boolean",
-    "detour?": "string",
-    "sniff?": "boolean",
-    "sniff_override_destination?": "boolean",
-    "sniff_timeout?": "Duration",
-    "domain_strategy?": "DomainStrategy",
-    "udp_disable_domain_unmapping?": "boolean",
-    "up?": "string",
-    "up_mbps?": "integer",
-    "down?": "string",
-    "down_mbps?": "integer",
-    "obfs?": "string",
-    "users?": "HysteriaUser[]",
-    "recv_window_conn?": "integer",
-    "recv_window_client?": "integer",
-    "max_conn_client?": "integer",
-    "disable_mtu_discovery?": "boolean",
-    "tls?": "InboundTLSOptions",
-  },
-  LogicalRule: {
-    mode: "string",
-    "rules?": "Rule[]",
-    "invert?": "boolean",
-    "outbound?": "string",
-  },
-  Rule: [
-    [{ "type?": "'default'" }, "&", "DefaultRule"],
-    "|",
-    [{ "type?": "'logical'" }, "&", "LogicalRule"],
-  ],
-  V2RayQUICOptions: {},
-  V2RayTransportOptions: [
-    [
-      [
-        [
-          [{ type: "'quic'" }, "&", "V2RayQUICOptions"],
-          "|",
-          [{ type: "'grpc'" }, "&", "V2RayGRPCOptions"],
-        ],
-        "|",
-        [{ type: "'httpupgrade'" }, "&", "V2RayHTTPUpgradeOptions"],
-      ],
-      "|",
-      [{ type: "'http'" }, "&", "V2RayHTTPOptions"],
-    ],
-    "|",
-    [{ type: "'ws'" }, "&", "V2RayWebsocketOptions"],
-  ],
-  InboundACMEOptions: {
-    "domain?": "ListableString",
-    "data_directory?": "string",
-    "default_server_name?": "string",
-    "email?": "string",
-    "provider?": "string",
-    "disable_http_challenge?": "boolean",
-    "disable_tls_alpn_challenge?": "boolean",
-    "alternative_http_port?": "integer",
-    "alternative_tls_port?": "integer",
-    "external_account?": "ACMEExternalAccountOptions",
-    "dns01_challenge?": "ACMEDNS01ChallengeOptions",
-  },
-  DebugOptions: {
-    "listen?": "string",
-    "gc_percent?": "integer",
-    "max_stack?": "integer",
-    "max_threads?": "integer",
-    "panic_on_fault?": "boolean",
-    "trace_back?": "string",
-    "memory_limit?": "MemoryBytes",
-    "oom_killer?": "boolean",
-  },
-  DNSFakeIPOptions: {
-    "enabled?": "boolean",
-    "inet4_range?": "Prefix",
-    "inet6_range?": "Prefix",
-  },
-  DirectOutboundOptions: {
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-    "override_address?": "string",
-    "override_port?": "integer",
-    "proxy_protocol?": "integer",
-  },
-  NTPOptions: {
-    "enabled?": "boolean",
-    "interval?": "Duration",
-    "write_to_system?": "boolean",
-    server: "string",
-    server_port: "integer",
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-  },
-  TrojanOutboundOptions: {
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-    server: "string",
-    server_port: "integer",
-    password: "string",
-    "network?": "NetworkList",
-    "tls?": "OutboundTLSOptions",
-    "multiplex?": "OutboundMultiplexOptions",
-    "transport?": "V2RayTransportOptions",
-  },
-  OutboundECHOptions: {
-    "enabled?": "boolean",
-    "pq_signature_schemes_enabled?": "boolean",
-    "dynamic_record_sizing_disabled?": "boolean",
-    "config?": "ListableString",
-    "config_path?": "string",
-  },
-  V2RayWebsocketOptions: {
-    "path?": "string",
-    "headers?": "object",
-    "max_early_data?": "integer",
-    "early_data_header_name?": "string",
-  },
-  ShadowsocksUser: {
+  VLESSUser: {
     name: "string",
-    password: "string",
+    uuid: "string",
+    "flow?": "string",
   },
-  OutboundUTLSOptions: {
-    "enabled?": "boolean",
-    "fingerprint?": "string",
-  },
-  InboundECHOptions: {
-    "enabled?": "boolean",
-    "pq_signature_schemes_enabled?": "boolean",
-    "dynamic_record_sizing_disabled?": "boolean",
-    "key?": "ListableString",
-    "key_path?": "string",
-  },
-  ShadowTLSHandshakeOptions: {
-    server: "string",
-    server_port: "integer",
-    "detour?": "string",
-    "bind_interface?": "string",
-    "inet4_bind_address?": "ListenAddress",
-    "inet6_bind_address?": "ListenAddress",
-    "protect_path?": "string",
-    "routing_mark?": "integer",
-    "reuse_addr?": "boolean",
-    "connect_timeout?": "Duration",
-    "tcp_fast_open?": "boolean",
-    "tcp_multi_path?": "boolean",
-    "udp_fragment?": "boolean",
-    "domain_strategy?": "DomainStrategy",
-    "fallback_delay?": "Duration",
-  },
-  DNSServerOptions: {
-    "tag?": "string",
-    address: "string",
-    "address_resolver?": "string",
-    "address_strategy?": "DomainStrategy",
-    "address_fallback_delay?": "Duration",
-    "strategy?": "DomainStrategy",
-    "detour?": "string",
-    "client_subnet?": "AddrPrefix",
-  },
-  DirectInboundOptions: {
+  VMessInboundOptions: {
     "listen?": "ListenAddress",
     "listen_port?": "integer",
     "tcp_fast_open?": "boolean",
@@ -1350,28 +1327,11 @@ export const Scope = scope({
     "sniff_timeout?": "Duration",
     "domain_strategy?": "DomainStrategy",
     "udp_disable_domain_unmapping?": "boolean",
-    "network?": "NetworkList",
-    "override_address?": "string",
-    "override_port?": "integer",
+    "users?": "VMessUser[]",
+    "tls?": "InboundTLSOptions",
+    "multiplex?": "InboundMultiplexOptions",
+    "transport?": "V2RayTransportOptions",
   },
-  DNSQueryType: "integer | string",
-  URLTestOutboundOptions: {
-    outbounds: "string[]",
-    "url?": "string",
-    "interval?": "Duration",
-    "tolerance?": "integer",
-    "idle_timeout?": "Duration",
-    "interrupt_exist_connections?": "boolean",
-  },
-  RuleSet: [
-    [
-      [{ type: "'local'" }, "&", "LocalRuleSet"],
-      "|",
-      [{ type: "'remote'" }, "&", "RemoteRuleSet"],
-    ],
-    "&",
-    { "tag?": "string", format: "string" },
-  ],
   VMessOutboundOptions: {
     "detour?": "string",
     "bind_interface?": "string",
@@ -1399,134 +1359,173 @@ export const Scope = scope({
     "multiplex?": "OutboundMultiplexOptions",
     "transport?": "V2RayTransportOptions",
   },
-}).export();
-export type LocalRuleSet = typeof Scope.LocalRuleSet.infer;
-export type Prefix = typeof Scope.Prefix.infer;
-export type HysteriaUser = typeof Scope.HysteriaUser.infer;
-export type TorOutboundOptions = typeof Scope.TorOutboundOptions.infer;
-export type LogicalDNSRule = typeof Scope.LogicalDNSRule.infer;
-export type HTTPProxyOptions = typeof Scope.HTTPProxyOptions.infer;
-export type V2RayAPIOptions = typeof Scope.V2RayAPIOptions.infer;
-export type ClashAPIOptions = typeof Scope.ClashAPIOptions.infer;
-export type ACMEDNS01AliDNSOptions = typeof Scope.ACMEDNS01AliDNSOptions.infer;
-export type DNSOptions = typeof Scope.DNSOptions.infer;
-export type WireGuardOutboundOptions =
-  typeof Scope.WireGuardOutboundOptions.infer;
-export type InboundRealityHandshakeOptions =
-  typeof Scope.InboundRealityHandshakeOptions.infer;
-export type ShadowsocksInboundOptions =
-  typeof Scope.ShadowsocksInboundOptions.infer;
-export type DefaultRule = typeof Scope.DefaultRule.infer;
-export type ListenAddress = typeof Scope.ListenAddress.infer;
-export type HTTPOutboundOptions = typeof Scope.HTTPOutboundOptions.infer;
-export type ExperimentalOptions = typeof Scope.ExperimentalOptions.infer;
-export type HysteriaOutboundOptions =
-  typeof Scope.HysteriaOutboundOptions.infer;
-export type UDPOverTCPOptions = typeof Scope.UDPOverTCPOptions.infer;
-export type RedirectInboundOptions = typeof Scope.RedirectInboundOptions.infer;
-export type ShadowsocksROutboundOptions =
-  typeof Scope.ShadowsocksROutboundOptions.infer;
-export type ServerOptions = typeof Scope.ServerOptions.infer;
-export type TUICOutboundOptions = typeof Scope.TUICOutboundOptions.infer;
-export type NetworkList = typeof Scope.NetworkList.infer;
-export type DefaultDNSRule = typeof Scope.DefaultDNSRule.infer;
-export type OutboundRealityOptions = typeof Scope.OutboundRealityOptions.infer;
-export type Hysteria2InboundOptions =
-  typeof Scope.Hysteria2InboundOptions.infer;
-export type VLESSUser = typeof Scope.VLESSUser.infer;
-export type Inbound = typeof Scope.Inbound.infer;
-export type ShadowsocksOutboundOptions =
-  typeof Scope.ShadowsocksOutboundOptions.infer;
-export type Outbound = typeof Scope.Outbound.infer;
-export type GeositeOptions = typeof Scope.GeositeOptions.infer;
-export type InboundTLSOptions = typeof Scope.InboundTLSOptions.infer;
-export type V2RayStatsServiceOptions =
-  typeof Scope.V2RayStatsServiceOptions.infer;
-export type VMessUser = typeof Scope.VMessUser.infer;
-export type TrojanUser = typeof Scope.TrojanUser.infer;
-export type Hysteria2Obfs = typeof Scope.Hysteria2Obfs.infer;
-export type VMessInboundOptions = typeof Scope.VMessInboundOptions.infer;
-export type ShadowsocksDestination = typeof Scope.ShadowsocksDestination.infer;
-export type DNSRule = typeof Scope.DNSRule.infer;
-export type ACMEExternalAccountOptions =
-  typeof Scope.ACMEExternalAccountOptions.infer;
-export type OutboundMultiplexOptions =
-  typeof Scope.OutboundMultiplexOptions.infer;
-export type HTTPMixedInboundOptions =
-  typeof Scope.HTTPMixedInboundOptions.infer;
-export type ShadowTLSOutboundOptions =
-  typeof Scope.ShadowTLSOutboundOptions.infer;
+  VMessUser: {
+    name: "string",
+    uuid: "string",
+    "alterId?": "integer",
+  },
+  WireGuardOutboundOptions: {
+    "detour?": "string",
+    "bind_interface?": "string",
+    "inet4_bind_address?": "ListenAddress",
+    "inet6_bind_address?": "ListenAddress",
+    "protect_path?": "string",
+    "routing_mark?": "integer",
+    "reuse_addr?": "boolean",
+    "connect_timeout?": "Duration",
+    "tcp_fast_open?": "boolean",
+    "tcp_multi_path?": "boolean",
+    "udp_fragment?": "boolean",
+    "domain_strategy?": "DomainStrategy",
+    "fallback_delay?": "Duration",
+    "system_interface?": "boolean",
+    "gso?": "boolean",
+    "interface_name?": "string",
+    local_address: "string | string[]",
+    private_key: "string",
+    "peers?": "WireGuardPeer[]",
+    server: "string",
+    server_port: "integer",
+    peer_public_key: "string",
+    "pre_shared_key?": "string",
+    "reserved?": "integer[]",
+    "workers?": "integer",
+    "mtu?": "integer",
+    "network?": "NetworkList",
+  },
+  WireGuardPeer: {
+    server: "string",
+    server_port: "integer",
+    "public_key?": "string",
+    "pre_shared_key?": "string",
+    "allowed_ips?": "string | string[]",
+    "reserved?": "integer[]",
+  },
+});
+export const types = $.export();
+export type ACMEDNS01AliDNSOptions = typeof types.ACMEDNS01AliDNSOptions.infer;
 export type ACMEDNS01ChallengeOptions =
-  typeof Scope.ACMEDNS01ChallengeOptions.infer;
-export type Hysteria2OutboundOptions =
-  typeof Scope.Hysteria2OutboundOptions.infer;
-export type MemoryBytes = typeof Scope.MemoryBytes.infer;
-export type RouteOptions = typeof Scope.RouteOptions.infer;
-export type CacheFileOptions = typeof Scope.CacheFileOptions.infer;
-export type NaiveInboundOptions = typeof Scope.NaiveInboundOptions.infer;
-export type V2RayHTTPOptions = typeof Scope.V2RayHTTPOptions.infer;
-export type V2RayGRPCOptions = typeof Scope.V2RayGRPCOptions.infer;
-export type Duration = typeof Scope.Duration.infer;
-export type User = typeof Scope.User.infer;
-export type Hysteria2User = typeof Scope.Hysteria2User.infer;
-export type Options = typeof Scope.Options.infer;
-export type AddrPrefix = typeof Scope.AddrPrefix.infer;
-export type VLESSOutboundOptions = typeof Scope.VLESSOutboundOptions.infer;
-export type WireGuardPeer = typeof Scope.WireGuardPeer.infer;
-export type TUICUser = typeof Scope.TUICUser.infer;
-export type V2RayHTTPUpgradeOptions =
-  typeof Scope.V2RayHTTPUpgradeOptions.infer;
-export type SocksOutboundOptions = typeof Scope.SocksOutboundOptions.infer;
-export type ListableInt = typeof Scope.ListableInt.infer;
-export type ListablePrefix = typeof Scope.ListablePrefix.infer;
-export type RemoteRuleSet = typeof Scope.RemoteRuleSet.infer;
-export type TrojanInboundOptions = typeof Scope.TrojanInboundOptions.infer;
+  typeof types.ACMEDNS01ChallengeOptions.infer;
 export type ACMEDNS01CloudflareOptions =
-  typeof Scope.ACMEDNS01CloudflareOptions.infer;
-export type InboundRealityOptions = typeof Scope.InboundRealityOptions.infer;
-export type DomainStrategy = typeof Scope.DomainStrategy.infer;
-export type ShadowTLSUser = typeof Scope.ShadowTLSUser.infer;
-export type SSHOutboundOptions = typeof Scope.SSHOutboundOptions.infer;
-export type ListableString = typeof Scope.ListableString.infer;
-export type ListableDNSQueryType = typeof Scope.ListableDNSQueryType.infer;
-export type TunPlatformOptions = typeof Scope.TunPlatformOptions.infer;
-export type TUICInboundOptions = typeof Scope.TUICInboundOptions.infer;
-export type VLESSInboundOptions = typeof Scope.VLESSInboundOptions.infer;
+  typeof types.ACMEDNS01CloudflareOptions.infer;
+export type ACMEExternalAccountOptions =
+  typeof types.ACMEExternalAccountOptions.infer;
+export type AddrPrefix = typeof types.AddrPrefix.infer;
+export type BrutalOptions = typeof types.BrutalOptions.infer;
+export type CacheFileOptions = typeof types.CacheFileOptions.infer;
+export type ClashAPIOptions = typeof types.ClashAPIOptions.infer;
+export type DNSFakeIPOptions = typeof types.DNSFakeIPOptions.infer;
+export type DNSOptions = typeof types.DNSOptions.infer;
+export type DNSQueryType = typeof types.DNSQueryType.infer;
+export type DNSRule = typeof types.DNSRule.infer;
+export type DNSServerOptions = typeof types.DNSServerOptions.infer;
+export type DebugOptions = typeof types.DebugOptions.infer;
+export type DefaultDNSRule = typeof types.DefaultDNSRule.infer;
+export type DefaultRule = typeof types.DefaultRule.infer;
+export type DirectInboundOptions = typeof types.DirectInboundOptions.infer;
+export type DirectOutboundOptions = typeof types.DirectOutboundOptions.infer;
+export type DomainStrategy = typeof types.DomainStrategy.infer;
+export type Duration = typeof types.Duration.infer;
+export type ExperimentalOptions = typeof types.ExperimentalOptions.infer;
+export type GeoIPOptions = typeof types.GeoIPOptions.infer;
+export type GeositeOptions = typeof types.GeositeOptions.infer;
+export type HTTPMixedInboundOptions =
+  typeof types.HTTPMixedInboundOptions.infer;
+export type HTTPOutboundOptions = typeof types.HTTPOutboundOptions.infer;
+export type HTTPProxyOptions = typeof types.HTTPProxyOptions.infer;
+export type Hysteria2InboundOptions =
+  typeof types.Hysteria2InboundOptions.infer;
+export type Hysteria2Obfs = typeof types.Hysteria2Obfs.infer;
+export type Hysteria2OutboundOptions =
+  typeof types.Hysteria2OutboundOptions.infer;
+export type Hysteria2User = typeof types.Hysteria2User.infer;
+export type HysteriaInboundOptions = typeof types.HysteriaInboundOptions.infer;
+export type HysteriaOutboundOptions =
+  typeof types.HysteriaOutboundOptions.infer;
+export type HysteriaUser = typeof types.HysteriaUser.infer;
+export type Inbound = typeof types.Inbound.infer;
+export type InboundACMEOptions = typeof types.InboundACMEOptions.infer;
+export type InboundECHOptions = typeof types.InboundECHOptions.infer;
 export type InboundMultiplexOptions =
-  typeof Scope.InboundMultiplexOptions.infer;
-export type BrutalOptions = typeof Scope.BrutalOptions.infer;
+  typeof types.InboundMultiplexOptions.infer;
+export type InboundRealityHandshakeOptions =
+  typeof types.InboundRealityHandshakeOptions.infer;
+export type InboundRealityOptions = typeof types.InboundRealityOptions.infer;
+export type InboundTLSOptions = typeof types.InboundTLSOptions.infer;
+export type ListenAddress = typeof types.ListenAddress.infer;
+export type LocalRuleSet = typeof types.LocalRuleSet.infer;
+export type LogOptions = typeof types.LogOptions.infer;
+export type LogicalDNSRule = typeof types.LogicalDNSRule.infer;
+export type LogicalRule = typeof types.LogicalRule.infer;
+export type MemoryBytes = typeof types.MemoryBytes.infer;
+export type NTPOptions = typeof types.NTPOptions.infer;
+export type NaiveInboundOptions = typeof types.NaiveInboundOptions.infer;
+export type NetworkList = typeof types.NetworkList.infer;
+export type Options = typeof types.Options.infer;
+export type Outbound = typeof types.Outbound.infer;
+export type OutboundECHOptions = typeof types.OutboundECHOptions.infer;
+export type OutboundMultiplexOptions =
+  typeof types.OutboundMultiplexOptions.infer;
+export type OutboundRealityOptions = typeof types.OutboundRealityOptions.infer;
+export type OutboundTLSOptions = typeof types.OutboundTLSOptions.infer;
+export type OutboundUTLSOptions = typeof types.OutboundUTLSOptions.infer;
+export type Prefix = typeof types.Prefix.infer;
+export type RedirectInboundOptions = typeof types.RedirectInboundOptions.infer;
+export type RemoteRuleSet = typeof types.RemoteRuleSet.infer;
+export type RouteOptions = typeof types.RouteOptions.infer;
+export type Rule = typeof types.Rule.infer;
+export type RuleSet = typeof types.RuleSet.infer;
+export type SSHOutboundOptions = typeof types.SSHOutboundOptions.infer;
 export type SelectorOutboundOptions =
-  typeof Scope.SelectorOutboundOptions.infer;
-export type UDPTimeoutCompat = typeof Scope.UDPTimeoutCompat.infer;
-export type SocksInboundOptions = typeof Scope.SocksInboundOptions.infer;
-export type ShadowTLSInboundOptions =
-  typeof Scope.ShadowTLSInboundOptions.infer;
-export type TProxyInboundOptions = typeof Scope.TProxyInboundOptions.infer;
-export type LogOptions = typeof Scope.LogOptions.infer;
-export type TunInboundOptions = typeof Scope.TunInboundOptions.infer;
-export type OutboundTLSOptions = typeof Scope.OutboundTLSOptions.infer;
-export type GeoIPOptions = typeof Scope.GeoIPOptions.infer;
-export type HysteriaInboundOptions = typeof Scope.HysteriaInboundOptions.infer;
-export type LogicalRule = typeof Scope.LogicalRule.infer;
-export type Rule = typeof Scope.Rule.infer;
-export type V2RayQUICOptions = typeof Scope.V2RayQUICOptions.infer;
-export type V2RayTransportOptions = typeof Scope.V2RayTransportOptions.infer;
-export type InboundACMEOptions = typeof Scope.InboundACMEOptions.infer;
-export type DebugOptions = typeof Scope.DebugOptions.infer;
-export type DNSFakeIPOptions = typeof Scope.DNSFakeIPOptions.infer;
-export type DirectOutboundOptions = typeof Scope.DirectOutboundOptions.infer;
-export type NTPOptions = typeof Scope.NTPOptions.infer;
-export type TrojanOutboundOptions = typeof Scope.TrojanOutboundOptions.infer;
-export type OutboundECHOptions = typeof Scope.OutboundECHOptions.infer;
-export type V2RayWebsocketOptions = typeof Scope.V2RayWebsocketOptions.infer;
-export type ShadowsocksUser = typeof Scope.ShadowsocksUser.infer;
-export type OutboundUTLSOptions = typeof Scope.OutboundUTLSOptions.infer;
-export type InboundECHOptions = typeof Scope.InboundECHOptions.infer;
+  typeof types.SelectorOutboundOptions.infer;
+export type ServerOptions = typeof types.ServerOptions.infer;
 export type ShadowTLSHandshakeOptions =
-  typeof Scope.ShadowTLSHandshakeOptions.infer;
-export type DNSServerOptions = typeof Scope.DNSServerOptions.infer;
-export type DirectInboundOptions = typeof Scope.DirectInboundOptions.infer;
-export type DNSQueryType = typeof Scope.DNSQueryType.infer;
-export type URLTestOutboundOptions = typeof Scope.URLTestOutboundOptions.infer;
-export type RuleSet = typeof Scope.RuleSet.infer;
-export type VMessOutboundOptions = typeof Scope.VMessOutboundOptions.infer;
+  typeof types.ShadowTLSHandshakeOptions.infer;
+export type ShadowTLSInboundOptions =
+  typeof types.ShadowTLSInboundOptions.infer;
+export type ShadowTLSOutboundOptions =
+  typeof types.ShadowTLSOutboundOptions.infer;
+export type ShadowTLSUser = typeof types.ShadowTLSUser.infer;
+export type ShadowsocksDestination = typeof types.ShadowsocksDestination.infer;
+export type ShadowsocksInboundOptions =
+  typeof types.ShadowsocksInboundOptions.infer;
+export type ShadowsocksOutboundOptions =
+  typeof types.ShadowsocksOutboundOptions.infer;
+export type ShadowsocksROutboundOptions =
+  typeof types.ShadowsocksROutboundOptions.infer;
+export type ShadowsocksUser = typeof types.ShadowsocksUser.infer;
+export type SocksInboundOptions = typeof types.SocksInboundOptions.infer;
+export type SocksOutboundOptions = typeof types.SocksOutboundOptions.infer;
+export type TProxyInboundOptions = typeof types.TProxyInboundOptions.infer;
+export type TUICInboundOptions = typeof types.TUICInboundOptions.infer;
+export type TUICOutboundOptions = typeof types.TUICOutboundOptions.infer;
+export type TUICUser = typeof types.TUICUser.infer;
+export type TorOutboundOptions = typeof types.TorOutboundOptions.infer;
+export type TrojanInboundOptions = typeof types.TrojanInboundOptions.infer;
+export type TrojanOutboundOptions = typeof types.TrojanOutboundOptions.infer;
+export type TrojanUser = typeof types.TrojanUser.infer;
+export type TunInboundOptions = typeof types.TunInboundOptions.infer;
+export type TunPlatformOptions = typeof types.TunPlatformOptions.infer;
+export type UDPOverTCPOptions = typeof types.UDPOverTCPOptions.infer;
+export type UDPTimeoutCompat = typeof types.UDPTimeoutCompat.infer;
+export type URLTestOutboundOptions = typeof types.URLTestOutboundOptions.infer;
+export type User = typeof types.User.infer;
+export type V2RayAPIOptions = typeof types.V2RayAPIOptions.infer;
+export type V2RayGRPCOptions = typeof types.V2RayGRPCOptions.infer;
+export type V2RayHTTPOptions = typeof types.V2RayHTTPOptions.infer;
+export type V2RayHTTPUpgradeOptions =
+  typeof types.V2RayHTTPUpgradeOptions.infer;
+export type V2RayQUICOptions = typeof types.V2RayQUICOptions.infer;
+export type V2RayStatsServiceOptions =
+  typeof types.V2RayStatsServiceOptions.infer;
+export type V2RayTransportOptions = typeof types.V2RayTransportOptions.infer;
+export type V2RayWebsocketOptions = typeof types.V2RayWebsocketOptions.infer;
+export type VLESSInboundOptions = typeof types.VLESSInboundOptions.infer;
+export type VLESSOutboundOptions = typeof types.VLESSOutboundOptions.infer;
+export type VLESSUser = typeof types.VLESSUser.infer;
+export type VMessInboundOptions = typeof types.VMessInboundOptions.infer;
+export type VMessOutboundOptions = typeof types.VMessOutboundOptions.infer;
+export type VMessUser = typeof types.VMessUser.infer;
+export type WireGuardOutboundOptions =
+  typeof types.WireGuardOutboundOptions.infer;
+export type WireGuardPeer = typeof types.WireGuardPeer.infer;
